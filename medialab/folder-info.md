@@ -1,4 +1,4 @@
-This directory must contain the game description file "SCENARIO-ID.txt".
+**This directory must contain the game description file** *"SCENARIO-ID.txt"*.
 
-It includes some valid description example files.
+It includes some valid description example files, as well as some that are expected to throw exceptions.
 
