@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="236.0" prefWidth="291.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hypermine.LoadPopupView">
+    <children>
+        <GridPane layoutX="32.0" layoutY="80.0" prefHeight="43.0" prefWidth="218.0">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="109.66037795330644" minWidth="10.0" prefWidth="88.75476419700779" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="67.09434554363847" minWidth="6.396216202732887" prefWidth="14.396229467938596" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="114.92452997497594" minWidth="10.0" prefWidth="114.92452997497594" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints maxHeight="45.56604402622921" minHeight="10.0" prefHeight="32.792435675594255" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <Label text="SCENARIO-ID" />
+                <TextField GridPane.columnIndex="2" />
+            <Label text=":" GridPane.columnIndex="1" />
+            </children>
+        </GridPane>
+        <Text layoutX="32.0" layoutY="49.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose an existing game description!" />
+      <Text fill="#7ba8e0" layoutX="32.0" layoutY="147.0" strokeType="OUTSIDE" strokeWidth="0.0" text="A .txt file under the name must exist in the &quot;medialab&quot; directory." wrappingWidth="267.73187255859375" />
+        <Button layoutX="217.0" layoutY="187.0" mnemonicParsing="false" text="OK" />
+    </children>
+</AnchorPane>
