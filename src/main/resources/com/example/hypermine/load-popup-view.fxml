@@ -22,12 +22,12 @@
             </rowConstraints>
             <children>
                 <Label text="SCENARIO-ID" />
-                <TextField GridPane.columnIndex="2" />
+                <TextField fx:id="FilenameField" GridPane.columnIndex="2" />
             <Label text=":" GridPane.columnIndex="1" />
             </children>
         </GridPane>
         <Text layoutX="32.0" layoutY="49.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose an existing game description!" />
       <Text fill="#7ba8e0" layoutX="32.0" layoutY="147.0" strokeType="OUTSIDE" strokeWidth="0.0" text="A .txt file under the name must exist in the &quot;medialab&quot; directory." wrappingWidth="267.73187255859375" />
-        <Button layoutX="217.0" layoutY="187.0" mnemonicParsing="false" text="OK" />
+        <Button fx:id="OKButton" layoutX="217.0" layoutY="187.0" mnemonicParsing="false" onAction="#onOKButtonClick" text="OK" />
     </children>
 </AnchorPane>
