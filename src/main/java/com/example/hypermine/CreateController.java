@@ -8,6 +8,10 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
 
 public class CreateController {
 
@@ -30,25 +34,55 @@ public class CreateController {
     private Button SubmitButton;
 
     @FXML
-    void onSubmitButtonClick(ActionEvent event) {
+    void onSubmitButtonClick(ActionEvent event) throws IOException {
 
+        /*
+         * Upon clicking submit, a file is created
+         * using the text fields' input and then
+         * sent to Main to check its validity.
+         * In case it's invalid, an alert widow
+         * pops up and informs the user.
+         */
 
-        File file = new File(".\\");
+        // TODO: handle already existing file names (choice: overwrite it or disallow?)
+        // TODO: handle cases where the user hasn't filled out everything. empty strings are problematic.
+
+        String ScenarioID = String.format(
+                "./src/main/java/com/example/hypermine/medialab/%s.txt", FileNameField.getText());
+
+        File file = new File(ScenarioID);
+        if (file.createNewFile()) System.out.println("File created...");
+        try {
+            FileWriter myWriter = new FileWriter(ScenarioID);
+            myWriter.write(
+                    String.format("%s\n%s\n%s\n%s",
+                            LevelField.getText(), MinesField.getText(),
+                            TimeField.getText(), SupermineField.getText()
+                    )
+            );
+            myWriter.close();
+        } catch (IOException e) {
+            System.out.println("FileWriter caused an exception...");
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+
         try {
             Main.ScenarioCheck(file);
         } catch(InvalidValueException e1) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Invalid Values");
-            alert.setContentText(String.format("Invalid description values...\nTry again.", FileNameField.getText()));
+            alert.setContentText("Invalid description values...\nTry again.");
             alert.showAndWait();
 
         } catch (InvalidDescriptionException e2) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Invalid Description");
-            alert.setContentText(String.format("Fill all fields and try again...\n", FileNameField.getText()));
+            alert.setContentText("Fill all fields and try again...\n");
             alert.showAndWait();
         }
-        // Close the window.
+
+        // Close the pop-up window.
         Stage stage = (Stage) SubmitButton.getScene().getWindow();
         stage.close();
     }

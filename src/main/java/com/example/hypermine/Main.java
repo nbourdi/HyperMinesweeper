@@ -24,6 +24,7 @@ public class Main extends Application {
 
         int lines = 0;
         int[] line = new int[4];
+
         try {
             Scanner sc = new Scanner(file);
             int i = 0;
@@ -35,6 +36,8 @@ public class Main extends Application {
             throw new RuntimeException(e);
         }
         if (lines != 4) {
+            System.out.println(lines);
+            System.out.println("File size in bytes " + file.length());
             throw new InvalidDescriptionException();
         }
         // TODO: tidy up this mess of a statement...
