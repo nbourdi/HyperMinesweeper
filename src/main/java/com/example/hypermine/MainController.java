@@ -5,13 +5,16 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.SubScene;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class MainController {
+    public Pane GridArea;
     @FXML
     private MenuItem CreateButton;
 
@@ -44,6 +47,15 @@ public class MainController {
         BombCount.setText("initial");   // static and final, all i need to do is get
         MarkedCount.setText("0");       // this will need to be updated dependent on the game
         Countdown.setText("initial"); // put the ticking timer here
+        Tile[][] grid = new Tile[9][9];
+        for (int y = 0; y < 9; y++) {
+            for (int x = 0; x < 9; x++) {
+                Tile tile = new Tile(x, y, Math.random() < 0.2, false, 24);
+
+                grid[x][y] = tile;
+                GridArea.getChildren().add(tile);
+            }
+        }
         // Game new_Game = new Game();
     }
 
