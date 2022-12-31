@@ -6,9 +6,8 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
+import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
 
 public class Tile extends StackPane {
     private final int row;
@@ -47,7 +46,6 @@ public class Tile extends StackPane {
         this.isSupermine = isSupermine;
         square = new Rectangle(tile_size, tile_size);
         square.setStroke(Color.GREY);
-        //imv.setImage(isMine ? MINE : isSupermine ? HITMINE : BLANK);
         this.getChildren().addAll(imv);
         setTranslateX(row * tile_size);
         setTranslateY(column * tile_size);
@@ -56,6 +54,7 @@ public class Tile extends StackPane {
             if (event.getButton() == MouseButton.PRIMARY)
             {
                 this.reveal(this);
+                // TODO: add move counter
             } else if (event.getButton() == MouseButton.SECONDARY)
             {
                 this.mark(this);
@@ -63,7 +62,7 @@ public class Tile extends StackPane {
         });
     }
 
-    public void reveal(Tile tile) {
+    public void reveal(@NotNull Tile tile) {
         // reveal or open the tile, this should be called from the controller on left click.
         if (tile.isMine) {
             tile.imv.setImage(HITMINE);
@@ -79,7 +78,7 @@ public class Tile extends StackPane {
         }
     }
 
-    public void mark(Tile tile) {
+    public void mark(@NotNull Tile tile) {
         // on right click called.
         tile.isMarked = !tile.isMarked;
         if (isMarked) {

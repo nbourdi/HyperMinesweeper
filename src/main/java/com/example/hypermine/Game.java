@@ -5,10 +5,11 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class Game {
-    State state = State.RUNNING;
+    static State state = State.RUNNING;
     private int time;
     private int mineCount;
     private int markedCount = 0;
+    private int moveCount = 0;
     private int level;
     private boolean hasSupermine;
     public static File Scenario;
@@ -51,19 +52,51 @@ public class Game {
     }
 
     // Game constructor, called each time the start button is pressed.
-    public Game(File Scenario) throws InvalidValueException, InvalidDescriptionException {
+    public Game() throws InvalidValueException, InvalidDescriptionException {
         int[] line = ScenarioCheck(Scenario);
         mineCount = line[1];
         time = line[2];
         this.hasSupermine = (line[3] == 0) ? false : true;
     }
-    public void lose(Game game) {
-        game.state = State.LOST;
+    public static void lose() {
+        state = State.LOST;
         // TODO: export to game history & get a popup? to notify
     }
 
-    public void win(Game game) {
-        game.state = State.WON;
+    public static void win() {
+        state = State.WON;
         // TODO: export to game history & get a popup? to notify
+    }
+
+    public int getMineCount() {
+        return mineCount;
+    }
+
+    public void setMineCount(int mineCount) {
+        this.mineCount = mineCount;
+    }
+
+    public int getMarkedCount() {
+        return markedCount;
+    }
+
+    public void setMarkedCount(int markedCount) {
+        this.markedCount = markedCount;
+    }
+
+    public int getTime() {
+        return time;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
+    }
+
+    public int getMoveCount() {
+        return moveCount;
+    }
+
+    public void setMoveCount(int moveCount) {
+        this.moveCount = moveCount;
     }
 }

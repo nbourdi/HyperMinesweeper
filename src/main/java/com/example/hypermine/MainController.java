@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 
 public class MainController {
     public Pane GridArea;
+    public Tile[][] Grid;
     @FXML
     private Label BombCount;
     @FXML
@@ -30,16 +31,20 @@ public class MainController {
         BombCount.setText("initial");   // static and final, all i need to do is get
         MarkedCount.setText("0");       // this will need to be updated dependent on the game
         Countdown.setText("initial"); // put the ticking timer here
-        Tile[][] grid = new Tile[9][9];
+        Grid = new Tile[9][9];
         for (int y = 0; y < 9; y++) {
             for (int x = 0; x < 9; x++) {
                 Tile tile = new Tile(x, y, Math.random() < 0.2, false, 24);
 
-                grid[x][y] = tile;
+                Grid[x][y] = tile;
                 GridArea.getChildren().add(tile);
             }
         }
-        // Game new_Game = new Game();
+        try {
+            Game new_Game = new Game();
+        } catch (InvalidValueException | InvalidDescriptionException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML
@@ -60,7 +65,7 @@ public class MainController {
     }
     @FXML
     protected void onSolutionButtonClick () {
-
+        Game.lose();
     }
 
     @FXML
@@ -77,6 +82,7 @@ public class MainController {
             stage.show();
         } catch (Exception e) {
             System.out.println("Could not open Load pop-up window...");
+            e.printStackTrace();
         }
 
     }
@@ -93,7 +99,7 @@ public class MainController {
             stage.setResizable(false);
             stage.show();
         } catch (Exception e) {
-            System.out.println("Could not open Start pop-up window...");
+            System.out.println("Could not open Create pop-up window...");
         }
     }
 
