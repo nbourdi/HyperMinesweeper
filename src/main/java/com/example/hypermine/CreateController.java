@@ -68,7 +68,7 @@ public class CreateController {
         }
 
         try {
-            Main.ScenarioCheck(file);
+            Game.ScenarioCheck(file);
         } catch(InvalidValueException e1) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Invalid Values");

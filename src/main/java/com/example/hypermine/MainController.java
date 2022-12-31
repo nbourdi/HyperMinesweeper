@@ -1,13 +1,10 @@
 package com.example.hypermine;
 
-import com.example.hypermine.medialab.Game;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.SubScene;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -16,26 +13,11 @@ import javafx.stage.Stage;
 public class MainController {
     public Pane GridArea;
     @FXML
-    private MenuItem CreateButton;
-
-    @FXML
-    private MenuItem ExitButton;
-
-    @FXML
-    private MenuItem LoadButton;
-
-    @FXML
-    private MenuItem StartButton;
-
-    @FXML
     private Label BombCount;
-
     @FXML
     private Label Countdown;
-
     @FXML
     private Label MarkedCount;
-
 
     @FXML
     protected void onExitButtonClick() {
@@ -44,6 +26,7 @@ public class MainController {
 
     @FXML
     protected void onStartButtonClick () {
+       // Game game = new Game()
         BombCount.setText("initial");   // static and final, all i need to do is get
         MarkedCount.setText("0");       // this will need to be updated dependent on the game
         Countdown.setText("initial"); // put the ticking timer here
