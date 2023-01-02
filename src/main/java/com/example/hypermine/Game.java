@@ -13,6 +13,7 @@ public class Game {
     private int level;
     private boolean hasSupermine;
     public static File Scenario;
+    public static Tile[][] MineField;
     public static int[] ScenarioCheck(File file) throws InvalidDescriptionException, InvalidValueException {
         /*
          *  Checks for the validity of the game description .txt.
@@ -57,6 +58,7 @@ public class Game {
         mineCount = line[1];
         time = line[2];
         this.hasSupermine = (line[3] == 0) ? false : true;
+        // createGrid(mineCount, hasSupermine);
     }
     public static void lose() {
         state = State.LOST;
@@ -66,6 +68,24 @@ public class Game {
     public static void win() {
         state = State.WON;
         // TODO: export to game history & get a popup? to notify
+    }
+
+    public Tile[][] createGrid() {
+        MineField = new Tile[9][9];
+        for (int y = 0; y < 9; y++) {
+            for (int x = 0; x < 9; x++) {
+                Tile tile = new Tile(x, y, Math.random() < 0.2, false);
+
+                MineField[x][y] = tile;
+//                GridArea.getChildren().add(tile);
+            }
+        }
+        for (int y = 0; y < 9; y++) {
+            for (int x = 0; x < 9; x++) {
+                MineField[x][y].calcNeighbors(MineField[x][y]);
+            }
+        }
+        return MineField;
     }
 
     public int getMineCount() {

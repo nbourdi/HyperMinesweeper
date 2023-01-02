@@ -12,7 +12,7 @@ import javafx.stage.Stage;
 
 public class MainController {
     public Pane GridArea;
-    public Tile[][] Grid;
+    public Tile[][] Grid = new Tile[9][9];
     @FXML
     private Label BombCount;
     @FXML
@@ -27,23 +27,21 @@ public class MainController {
 
     @FXML
     protected void onStartButtonClick () {
-       // Game game = new Game()
+        Game new_Game;
+        try {
+            new_Game = new Game();
+        } catch (InvalidValueException | InvalidDescriptionException e) {
+            throw new RuntimeException(e);
+        }
         BombCount.setText("initial");   // static and final, all i need to do is get
         MarkedCount.setText("0");       // this will need to be updated dependent on the game
         Countdown.setText("initial"); // put the ticking timer here
-        Grid = new Tile[9][9];
+
+        Grid = new_Game.createGrid();
         for (int y = 0; y < 9; y++) {
             for (int x = 0; x < 9; x++) {
-                Tile tile = new Tile(x, y, Math.random() < 0.2, false, 24);
-
-                Grid[x][y] = tile;
-                GridArea.getChildren().add(tile);
+                GridArea.getChildren().add(Grid[x][y]);
             }
-        }
-        try {
-            Game new_Game = new Game();
-        } catch (InvalidValueException | InvalidDescriptionException e) {
-            throw new RuntimeException(e);
         }
     }
 

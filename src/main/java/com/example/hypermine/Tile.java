@@ -8,6 +8,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 
 public class Tile extends StackPane {
     private final int row;
@@ -17,7 +19,7 @@ public class Tile extends StackPane {
 
     private boolean isMarked = false;
 
-    private final int neighMines = 0; // number of neighboring mines -> will determine number if not mine.
+    private int neighMines = 0; // number of neighboring mines -> will determine number if not mine.
     private final Rectangle square;
     private final Image BLANK = new Image("file:src/grid-icons-pack/blank.png");
     private final Image EXPOSED = new Image("file:src/grid-icons-pack/exposed.png");
@@ -39,11 +41,14 @@ public class Tile extends StackPane {
     Image[] num = {EXPOSED, NO_1, NO_2, NO_3, NO_4, NO_5, NO_6, NO_7, NO_8};
 
     private final ImageView imv = new ImageView(BLANK);
-    public Tile (int row, int column, boolean isMine, boolean isSupermine, int tile_size) {
+    private List<Tile> neighbors;
+
+    public Tile (int row, int column, boolean isMine, boolean isSupermine) {
         this.row = row;
         this.column = column;
         this.isMine = isMine;
         this.isSupermine = isSupermine;
+        int tile_size = 24;
         square = new Rectangle(tile_size, tile_size);
         square.setStroke(Color.GREY);
         this.getChildren().addAll(imv);
@@ -75,6 +80,12 @@ public class Tile extends StackPane {
             // TODO: end the game
         } else {
             tile.imv.setImage(num[tile.neighMines]);
+            // TODO: reveal neighboring
+            for (neighbor: tile.neighbors  // foreach statement in java or filter like that one dude?
+                 ) {
+
+            }
+            reveal(neighbor);
         }
     }
 
@@ -87,18 +98,44 @@ public class Tile extends StackPane {
         }
         else tile.imv.setImage(BLANK);
     }
-    private int calcNeighbors (Tile tile) {
+    public void calcNeighbors (Tile tile) {
         // calculate the number of nearby mines
         int res = 0;
+        int x = tile.getRow();
+        int y = tile.getColumn();
+
         // for loop...
-        return res;
+        int[] points = new int[] {
+                -1, -1,
+                -1, 0,
+                -1, 1,
+                0, -1,
+                0, 1,
+                1, -1,
+                1, 0,
+                1, 1
+        };
+
+        for (int i = 0; i < points.length; i++) {
+            int dx = points[i];
+            int dy = points[++i];
+
+            if (x+dx >= 0 && x + dx <= 8 &&
+                y + dy >= 0 && y+ dy <= 8) {
+                if (Game.MineField[x + dx][y + dy].isMine) tile.neighMines++;}
+        }
     }
+
     public int getRow() {
         return row;
     }
 
     public int getColumn() {
         return column;
+    }
+
+    public void setNeighmines (int neighMines) {
+        this.neighMines = neighMines;
     }
 
 }
