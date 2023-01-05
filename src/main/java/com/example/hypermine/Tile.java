@@ -7,8 +7,11 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import org.jetbrains.annotations.NotNull;
-
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
+
+import static com.example.hypermine.Main.Handler;
 
 
 public class Tile extends StackPane {
@@ -19,8 +22,9 @@ public class Tile extends StackPane {
 
     private boolean isMarked = false;
 
+    private boolean isRevealed = false;
+
     private int neighMines = 0; // number of neighboring mines -> will determine number if not mine.
-    private final Rectangle square;
     private final Image BLANK = new Image("file:src/grid-icons-pack/blank.png");
     private final Image EXPOSED = new Image("file:src/grid-icons-pack/exposed.png");
     private final Image FLAG = new Image("file:src/grid-icons-pack/flag.png");
@@ -41,7 +45,7 @@ public class Tile extends StackPane {
     Image[] num = {EXPOSED, NO_1, NO_2, NO_3, NO_4, NO_5, NO_6, NO_7, NO_8};
 
     private final ImageView imv = new ImageView(BLANK);
-    private List<Tile> neighbors;
+    private List<Tile> neighbors = new ArrayList<>();
 
     public Tile (int row, int column, boolean isMine, boolean isSupermine) {
         this.row = row;
@@ -49,7 +53,7 @@ public class Tile extends StackPane {
         this.isMine = isMine;
         this.isSupermine = isSupermine;
         int tile_size = 24;
-        square = new Rectangle(tile_size, tile_size);
+        Rectangle square = new Rectangle(tile_size, tile_size);
         square.setStroke(Color.GREY);
         this.getChildren().addAll(imv);
         setTranslateX(row * tile_size);
@@ -58,8 +62,8 @@ public class Tile extends StackPane {
         {
             if (event.getButton() == MouseButton.PRIMARY)
             {
+                Game.setMoveCount(Game.getMoveCount() + 1);
                 this.reveal(this);
-                // TODO: add move counter
             } else if (event.getButton() == MouseButton.SECONDARY)
             {
                 this.mark(this);
@@ -68,43 +72,73 @@ public class Tile extends StackPane {
     }
 
     public void reveal(@NotNull Tile tile) {
+        Predicate<Tile> rev = t -> (!t.isRevealed && !t.isMine && !t.isMarked);
         // reveal or open the tile, this should be called from the controller on left click.
         if (tile.isMine) {
             tile.imv.setImage(HITMINE);
-            // TODO: reveal all of the grid
-            // TODO: end the game
-
+            Game.lose();
         } else if (tile.isSupermine) {
             tile.imv.setImage(SUPERMINE);
-            // TODO: reveal all of the grid
-            // TODO: end the game
+            Game.lose();
         } else {
+            tile.isRevealed = true;
+            if (tile.isMarked) tile.mark(tile);
             tile.imv.setImage(num[tile.neighMines]);
-            // TODO: reveal neighboring
-            for (neighbor: tile.neighbors  // foreach statement in java or filter like that one dude?
-                 ) {
-
-            }
-            reveal(neighbor);
+            if(tile.neighMines == 0)
+                tile.neighbors.stream().filter(rev).forEach(this::reveal);
         }
     }
 
     public void mark(@NotNull Tile tile) {
         // on right click called.
-        tile.isMarked = !tile.isMarked;
-        if (isMarked) {
+
+        if (!isMarked && !isRevealed && Game.getMarkedCount() < Game.getMineCount()) { //TODO: urgent: game.getmarkedcount < minecount... not 10
             tile.imv.setImage(FLAG);
-            // TODO: if ismine or issupermine... increase the game mark counter.
+            Game.setMarkedCount(Game.getMarkedCount() + 1);
+            Game.setMoveCount(Game.getMoveCount() + 1);
+            Handler.setMarkedCount(Game.getMarkedCount());
+            tile.isMarked = !tile.isMarked;
+            if(tile.isSupermine && Game.getMoveCount() <= 4) {
+                cross_reveal(tile);
+            }
         }
-        else tile.imv.setImage(BLANK);
+        else if (isMarked){
+            tile.imv.setImage(BLANK);
+            Game.setMarkedCount(Game.getMarkedCount() - 1);
+            Handler.setMarkedCount(Game.getMarkedCount());
+            tile.isMarked = !tile.isMarked;
+        }
     }
-    public void calcNeighbors (Tile tile) {
+
+    private void cross_reveal(Tile tile) {
+        // TODO: do this for each tile in the cross
+        int col = tile.getColumn();
+        int row = tile.getRow();
+        for (int i = 0; i < Game.MineField.length; i++) {
+            Tile itile = Game.MineField[i][col];
+            itile.simple_reveal(itile);
+            itile.isRevealed = true;
+            if (itile.isMarked) itile.mark(itile);
+        }
+        for (int i = 0; i < Game.MineField.length; i++) {
+            Tile itile = Game.MineField[row][i];
+            itile.simple_reveal(itile);
+            itile.isRevealed = true;
+            if (itile.isMarked) itile.mark(itile);
+        }
+    }
+
+    public void simple_reveal(Tile tile) {
+        if (tile.isSupermine) tile.imv.setImage(HITMINE);
+        else if (tile.isMine) tile.imv.setImage(SUPERMINE);
+        else tile.imv.setImage(num[tile.neighMines]);
+    }
+    public void calcNeighbors (Tile tile, int dimension) {
         // calculate the number of nearby mines
         int res = 0;
         int x = tile.getRow();
         int y = tile.getColumn();
 
-        // for loop...
         int[] points = new int[] {
                 -1, -1,
                 -1, 0,
@@ -120,9 +154,12 @@ public class Tile extends StackPane {
             int dx = points[i];
             int dy = points[++i];
 
-            if (x+dx >= 0 && x + dx <= 8 &&
-                y + dy >= 0 && y+ dy <= 8) {
-                if (Game.MineField[x + dx][y + dy].isMine) tile.neighMines++;}
+            if (x+dx >= 0 && x + dx < dimension &&
+                y + dy >= 0 && y+ dy < dimension) {
+                if (Game.MineField[x + dx][y + dy].isMine) tile.neighMines++;
+                tile.neighbors.add(Game.MineField[x+dx][y+dy]);
+            }
+
         }
     }
 
@@ -133,9 +170,4 @@ public class Tile extends StackPane {
     public int getColumn() {
         return column;
     }
-
-    public void setNeighmines (int neighMines) {
-        this.neighMines = neighMines;
-    }
-
 }

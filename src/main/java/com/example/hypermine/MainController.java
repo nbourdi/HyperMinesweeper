@@ -6,13 +6,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import java.io.IOException;
 
 public class MainController {
+
     public Pane GridArea;
     public Tile[][] Grid = new Tile[9][9];
+    public Label StateLabel;
     @FXML
     private Label BombCount;
     @FXML
@@ -20,6 +22,12 @@ public class MainController {
     @FXML
     private Label MarkedCount;
 
+    public void setMarkedCount(int markedCount) {
+       MarkedCount.setText(Integer.toString(markedCount));
+    }
+    public void setStateLabel(String s) {
+        StateLabel.setText(s);
+    }
     @FXML
     protected void onExitButtonClick() {
         System.exit(0);
@@ -27,21 +35,28 @@ public class MainController {
 
     @FXML
     protected void onStartButtonClick () {
+        try {
         Game new_Game;
         try {
             new_Game = new Game();
         } catch (InvalidValueException | InvalidDescriptionException e) {
             throw new RuntimeException(e);
         }
-        BombCount.setText("initial");   // static and final, all i need to do is get
-        MarkedCount.setText("0");       // this will need to be updated dependent on the game
+        BombCount.setText(Integer.toString(Game.getMineCount()));
+        MarkedCount.setText("0");
         Countdown.setText("initial"); // put the ticking timer here
 
         Grid = new_Game.createGrid();
-        for (int y = 0; y < 9; y++) {
-            for (int x = 0; x < 9; x++) {
-                GridArea.getChildren().add(Grid[x][y]);
+
+        for (int y = 0; y < Grid.length; y++) {
+            for (Tile[] tiles : Grid) {
+                GridArea.getChildren().add(tiles[y]);
             }
+        }
+            StateLabel.setText("Game Running!");
+        }catch (NullPointerException pointerException) { StateLabel.setText("You haven't selected a game description...");}
+        catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -64,6 +79,7 @@ public class MainController {
     @FXML
     protected void onSolutionButtonClick () {
         Game.lose();
+        Game.solution();
     }
 
     @FXML
@@ -99,8 +115,5 @@ public class MainController {
         } catch (Exception e) {
             System.out.println("Could not open Create pop-up window...");
         }
-    }
-
-    public void mouseClicked(MouseEvent mouseEvent) {
     }
 }
