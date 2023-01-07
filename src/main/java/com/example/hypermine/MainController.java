@@ -1,5 +1,10 @@
 package com.example.hypermine;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,6 +14,9 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import java.io.IOException;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.util.Duration;
 
 public class MainController {
 
@@ -19,6 +27,9 @@ public class MainController {
     private Label BombCount;
     @FXML
     private Label Countdown;
+
+    private Timeline timeline;
+    private IntegerProperty timeSeconds;
     @FXML
     private Label MarkedCount;
 
@@ -44,7 +55,17 @@ public class MainController {
         }
         BombCount.setText(Integer.toString(Game.getMineCount()));
         MarkedCount.setText("0");
-        Countdown.setText("initial"); // put the ticking timer here
+//        Countdown.textProperty().bind(timeSeconds.asString());// put the ticking timer here
+//        if (timeline != null) {
+//            timeline.stop();
+//        }
+//        int t = Game.getTime();
+//        timeSeconds.set(t);
+//        timeline = new Timeline();
+//        timeline.getKeyFrames().add(
+//                new KeyFrame(Duration.seconds(t+1),
+//                        new KeyValue(timeSeconds, 0)));
+//        timeline.playFromStart();
 
         Grid = new_Game.createGrid();
 
@@ -54,7 +75,9 @@ public class MainController {
             }
         }
             StateLabel.setText("Game Running!");
-        }catch (NullPointerException pointerException) { StateLabel.setText("You haven't selected a game description...");}
+        }catch (NullPointerException pointerException) {
+            StateLabel.setText("You haven't selected a game description...");
+        }
         catch (IOException e) {
             throw new RuntimeException(e);
         }

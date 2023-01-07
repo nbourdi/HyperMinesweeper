@@ -14,7 +14,7 @@ import static com.example.hypermine.Main.Handler;
 
 public class Game {
     static State state = State.RUNNING;
-    private int time;
+    private static int time;
     private static int mineCount;
     private static int markedCount = 0;
     private static int moveCount = 0;
@@ -158,12 +158,12 @@ public class Game {
         markedCount = i;
     }
 
-    public int getTime() {
+    public static int getTime() {
         return time;
     }
 
     public void setTime(int time) {
-        this.time = time;
+        Game.time = time;
     }
 
     public static int getMoveCount() {
