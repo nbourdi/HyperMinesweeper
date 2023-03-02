@@ -81,6 +81,7 @@ public class Tile extends StackPane {
             tile.imv.setImage(SUPERMINE);
             Game.lose();
         } else {
+            Game.winCheck();
             tile.isRevealed = true;
             if (tile.isMarked) tile.mark(tile);
             tile.imv.setImage(num[tile.neighMines]);
@@ -89,9 +90,9 @@ public class Tile extends StackPane {
         }
     }
 
-    public void mark(@NotNull Tile tile) {
-        // on right click called.
 
+    // Called on right click on tile to either mark or unmark.
+    public void mark(@NotNull Tile tile) {
         if (!isMarked && !isRevealed && Game.getMarkedCount() < Game.getMineCount()) { //TODO: urgent: game.getmarkedcount < minecount... not 10
             tile.imv.setImage(FLAG);
             Game.setMarkedCount(Game.getMarkedCount() + 1);

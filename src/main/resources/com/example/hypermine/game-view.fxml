@@ -8,6 +8,7 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
@@ -77,8 +78,12 @@
             </children></HBox>
         <Separator prefWidth="200.0" />
         <Separator layoutX="10.0" layoutY="83.0" prefWidth="200.0" />
-      <Pane fx:id="GridArea" prefHeight="291.0" prefWidth="400.0" style="-fx-background-color: (50,80,50);" />
-      <Label fx:id="StateLabel" text="Create/Load and clisck Strart from the Application Menu :)">
+      <BorderPane prefHeight="200.0" prefWidth="200.0">
+         <center>
+            <Pane fx:id="GridArea" prefHeight="278.0" prefWidth="400.0" style="-fx-background-color: (50,80,50);" BorderPane.alignment="CENTER" />
+         </center>
+      </BorderPane>
+      <Label fx:id="StateLabel" text="Create/Load and click Start from the Application Menu :)">
          <font>
             <Font name="Microsoft YaHei Light" size="9.0" />
          </font>

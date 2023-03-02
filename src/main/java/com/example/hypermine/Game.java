@@ -18,9 +18,11 @@ public class Game {
     private static int mineCount;
     private static int markedCount = 0;
     private static int moveCount = 0;
-    private final boolean hasSupermine;
+    private static boolean hasSupermine = false;
     public static File Scenario;
     public static Tile[][] MineField;
+
+    private static int openedCells = 0;
     public static int[] ScenarioCheck(File file) throws InvalidDescriptionException, InvalidValueException {
         /*
          *  Checks for the validity of the game description .txt.
@@ -64,20 +66,24 @@ public class Game {
         int[] line = ScenarioCheck(Scenario);
         mineCount = line[1];
         time = line[2];
-        this.hasSupermine = (line[3] == 0) ? false : true;
+        this.hasSupermine = line[3] != 0;
         moveCount = 0;
         markedCount = 0;
+        openedCells = 0;
     }
     public static void lose() {
         state = State.LOST;
         solution();
+        Handler.stopCountdown();
         Handler.setStateLabel("You lost =( ... Click Start to play again.");
+
         // TODO: export to game history
     }
 
     public static void win() {
         state = State.WON;
         solution();
+        Handler.stopCountdown();
         Handler.setStateLabel("You won! Click Start to play again.");
         // TODO: export to game history
     }
@@ -86,8 +92,9 @@ public class Game {
         for (Tile[] tiles : MineField) {
             for (int j = 0; j < MineField.length; j++) tiles[j].simple_reveal(tiles[j]);
         }
-
     }
+
+
 
     public Tile[][] createGrid() throws IOException {
         int dimension = hasSupermine ? 16 : 9;
@@ -172,5 +179,12 @@ public class Game {
 
     public static void setMoveCount(int i) {
         moveCount = i;
+    }
+
+    public static void winCheck() {
+        openedCells += 1;
+        System.out.println("openedCells: " + openedCells);
+        int allCells = hasSupermine ? 256 : 81;
+        if (allCells - openedCells == mineCount) win();
     }
 }

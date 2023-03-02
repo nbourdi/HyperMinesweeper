@@ -29,10 +29,13 @@ public class MainController {
     private Label Countdown;
 
     private Timeline timeline;
-    private IntegerProperty timeSeconds;
+    private IntegerProperty timeSeconds = new SimpleIntegerProperty();
     @FXML
     private Label MarkedCount;
 
+    public void stopCountdown() {
+                timeline.stop();
+    }
     public void setMarkedCount(int markedCount) {
        MarkedCount.setText(Integer.toString(markedCount));
     }
@@ -55,17 +58,22 @@ public class MainController {
         }
         BombCount.setText(Integer.toString(Game.getMineCount()));
         MarkedCount.setText("0");
-//        Countdown.textProperty().bind(timeSeconds.asString());// put the ticking timer here
-//        if (timeline != null) {
-//            timeline.stop();
-//        }
-//        int t = Game.getTime();
-//        timeSeconds.set(t);
-//        timeline = new Timeline();
-//        timeline.getKeyFrames().add(
-//                new KeyFrame(Duration.seconds(t+1),
-//                        new KeyValue(timeSeconds, 0)));
-//        timeline.playFromStart();
+        Countdown.textProperty().bind(timeSeconds.asString());
+        if (timeline != null) {
+            timeline.stop();
+        }
+        int t = Game.getTime();
+        // sets the duration for the countdown
+        timeSeconds.set(t);
+        timeline = new Timeline();
+        timeline.getKeyFrames().add(
+                new KeyFrame(Duration.seconds(t+1),
+                        new KeyValue(timeSeconds, 0)));
+        // If time runs out the game is lost.
+        timeline.setOnFinished( (lose) -> {
+            Game.lose();
+        });
+        timeline.playFromStart();
 
         Grid = new_Game.createGrid();
 
