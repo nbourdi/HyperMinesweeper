@@ -6,11 +6,15 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Main extends Application {
 
-    //TODO: game history as GAme[5]...
     static MainController Handler = new MainController();
+    static RoundsPopupView RoundsHandler = new RoundsPopupView();
+    public static List<int[]> History = new ArrayList<int[]>();
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("game-view.fxml"));

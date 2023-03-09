@@ -6,11 +6,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 import static com.example.hypermine.Main.Handler;
+import static com.example.hypermine.Main.History;
 
 public class Game {
     static State state = State.RUNNING;
@@ -23,6 +22,7 @@ public class Game {
     public static Tile[][] MineField;
 
     private static int openedCells = 0;
+    
     public static int[] ScenarioCheck(File file) throws InvalidDescriptionException, InvalidValueException {
         /*
          *  Checks for the validity of the game description .txt.
@@ -66,7 +66,7 @@ public class Game {
         int[] line = ScenarioCheck(Scenario);
         mineCount = line[1];
         time = line[2];
-        this.hasSupermine = line[3] != 0;
+        hasSupermine = line[3] != 0;
         moveCount = 0;
         markedCount = 0;
         openedCells = 0;
@@ -76,8 +76,17 @@ public class Game {
         solution();
         Handler.stopCountdown();
         Handler.setStateLabel("You lost =( ... Click Start to play again.");
+        save();
+    }
 
-        // TODO: export to game history
+    private static void save() {
+        int[] round = new int[4];
+        round[0] = mineCount;
+        round[1] = moveCount;
+        round[2] = time;
+        round[3] = state == State.WON ? 1 : 0;
+        History.add(round);
+        for (int[] ints : History) System.out.println(ints[1]);
     }
 
     public static void win() {
@@ -85,7 +94,7 @@ public class Game {
         solution();
         Handler.stopCountdown();
         Handler.setStateLabel("You won! Click Start to play again.");
-        // TODO: export to game history
+        save();
     }
 
     public static void solution() {
@@ -93,8 +102,6 @@ public class Game {
             for (int j = 0; j < MineField.length; j++) tiles[j].simple_reveal(tiles[j]);
         }
     }
-
-
 
     public Tile[][] createGrid() throws IOException {
         int dimension = hasSupermine ? 16 : 9;
@@ -169,10 +176,6 @@ public class Game {
         return time;
     }
 
-    public void setTime(int time) {
-        Game.time = time;
-    }
-
     public static int getMoveCount() {
         return moveCount;
     }
@@ -183,7 +186,6 @@ public class Game {
 
     public static void winCheck() {
         openedCells += 1;
-        System.out.println("openedCells: " + openedCells);
         int allCells = hasSupermine ? 256 : 81;
         if (allCells - openedCells == mineCount) win();
     }

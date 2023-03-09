@@ -20,8 +20,6 @@ public class LoadPopupView {
     @FXML
     public void onOKButtonClick(ActionEvent event) {
 
-        // TODO: look for the SCENARIO-ID.txt file ....
-
         String ScenarioID = String.format("./src/main/java/com/example/hypermine/medialab/%s.txt", FilenameField.getText());
         File file = new File(ScenarioID);
         if(file.exists()) {

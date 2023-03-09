@@ -3,8 +3,6 @@ package com.example.hypermine;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,9 +12,14 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.util.Duration;
+
+import static com.example.hypermine.Main.RoundsHandler;
 
 public class MainController {
 
@@ -32,7 +35,6 @@ public class MainController {
     private IntegerProperty timeSeconds = new SimpleIntegerProperty();
     @FXML
     private Label MarkedCount;
-
     public void stopCountdown() {
                 timeline.stop();
     }
@@ -103,6 +105,8 @@ public class MainController {
             stage.getIcons().add(icon);
             stage.setResizable(false);
             stage.show();
+            RoundsHandler = fxmlLoader.getController();
+            RoundsHandler.displayRounds();
         } catch (Exception e) {
             System.out.println("Could not open Rounds pop-up window...");
         }

@@ -30,9 +30,7 @@ public class Tile extends StackPane {
     private final Image FLAG = new Image("file:src/grid-icons-pack/flag.png");
     private final Image HITMINE = new Image("file:src/grid-icons-pack/hitmine.png");
     private final Image MINE = new Image("file:src/grid-icons-pack/mine.png");
-
-    // TODO: find a supermine.png
-    private final Image SUPERMINE = new Image("file:src/grid-icons-pack/hitmine.png");
+    private final Image SUPERMINE = new Image("file:src/grid-icons-pack/supermine.png");
     private final Image NO_1 = new Image("file:src/grid-icons-pack/number1.png");
     private final Image NO_2 = new Image("file:src/grid-icons-pack/number2.png");
     private final Image NO_3 = new Image("file:src/grid-icons-pack/number3.png");
@@ -93,7 +91,7 @@ public class Tile extends StackPane {
 
     // Called on right click on tile to either mark or unmark.
     public void mark(@NotNull Tile tile) {
-        if (!isMarked && !isRevealed && Game.getMarkedCount() < Game.getMineCount()) { //TODO: urgent: game.getmarkedcount < minecount... not 10
+        if (!isMarked && !isRevealed && Game.getMarkedCount() < Game.getMineCount()) {
             tile.imv.setImage(FLAG);
             Game.setMarkedCount(Game.getMarkedCount() + 1);
             Game.setMoveCount(Game.getMoveCount() + 1);
@@ -112,7 +110,6 @@ public class Tile extends StackPane {
     }
 
     private void cross_reveal(Tile tile) {
-        // TODO: do this for each tile in the cross
         int col = tile.getColumn();
         int row = tile.getRow();
         for (int i = 0; i < Game.MineField.length; i++) {
@@ -130,8 +127,8 @@ public class Tile extends StackPane {
     }
 
     public void simple_reveal(Tile tile) {
-        if (tile.isSupermine) tile.imv.setImage(HITMINE);
-        else if (tile.isMine) tile.imv.setImage(SUPERMINE);
+        if (tile.isSupermine) tile.imv.setImage(SUPERMINE);
+        else if (tile.isMine) tile.imv.setImage(HITMINE);
         else tile.imv.setImage(num[tile.neighMines]);
     }
     public void calcNeighbors (Tile tile, int dimension) {

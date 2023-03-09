@@ -44,9 +44,6 @@ public class CreateController {
          * pops up and informs the user.
          */
 
-        // TODO: handle already existing file names (choice: overwrite it or disallow?)
-        // TODO: handle cases where the user hasn't filled out everything. empty strings are problematic.
-
         String ScenarioID = String.format(
                 "./src/main/java/com/example/hypermine/medialab/%s.txt", FileNameField.getText());
 
